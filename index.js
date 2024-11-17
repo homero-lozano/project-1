@@ -69,13 +69,17 @@ function displayCocktails(cocktails) {
     return;
   }
 
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
   cocktails.forEach((cocktail) => {
+    const isFavorite = favorites.includes(cocktail.idDrink);
     const cocktailCard = document.createElement('div');
     cocktailCard.className = 'cocktail-card';
     cocktailCard.innerHTML = `
       <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}">
       <h3>${cocktail.strDrink}</h3>
       <button data-id="${cocktail.idDrink}" class="details-btn">View Details</button>
+      <button data-id="${cocktail.idDrink}" class="favorite-btn">${isFavorite ? '❤️' : '♡'}</button>
     `;
     cocktailContainer.appendChild(cocktailCard);
   });
@@ -86,7 +90,52 @@ function displayCocktails(cocktails) {
       fetchCocktailDetails(e.target.dataset.id);
     });
   });
+
+  // Add event listeners for "Favorite" buttons
+  document.querySelectorAll('.favorite-btn').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      toggleFavorite(e.target.dataset.id);
+    });
+  });
 }
+function toggleFavorite(id) {
+  let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  if (favorites.includes(id)) {
+    // Remove from favorites
+    favorites = favorites.filter((favId) => favId !== id);
+  } else {
+    // Add to favorites
+    favorites.push(id);
+  }
+  localStorage.setItem('favorites', JSON.stringify(favorites));
+
+  // Re-fetch and display cocktails to update the DOM
+  fetchCocktailsByName(searchInput.value);
+}
+function fetchFavorites() {
+  const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+  if (!favorites.length) {
+    cocktailContainer.innerHTML = '<p>No favorites added!</p>';
+    return;
+  }
+
+  Promise.all(
+    favorites.map((id) =>
+      fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
+        .then((resp) => resp.json())
+        .then((data) => data.drinks[0])
+    )
+  )
+    .then((drinks) => displayCocktails(drinks))
+    .catch((error) => {
+      console.error('Error fetching favorites:', error);
+      cocktailContainer.innerHTML = '<p>Something went wrong. Please try again later.</p>';
+    });
+}
+
+// Add event listener for a "View Favorites" button
+document.getElementById('view-favorites-btn').addEventListener('click', fetchFavorites);
+
 
 // Fetch and display cocktail details
 async function fetchCocktailDetails(id) {
