@@ -1,133 +1,71 @@
-document.addEventListener("DOMContentLoaded", () => console.log())
-
-function fetchData() {
-    fetch('url')
-    .then((resp) => resp.json())
-    .then(() => console.log(data))
-}
-
-const cocktailContainer = document.getElementById('cocktail-container');
-const searchInput = document.getElementById('search-input');
-const categoryFilter = document.getElementById('category-filter');
-const randomBtn = document.getElementById('random-btn');
-
-// Fetch and display cocktails by name
-async function fetchCocktailsByName(name) {
-  try {
-    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`);
+document.addEventListener("DOMContentLoaded", () => {
+  const cocktailContainer = document.getElementById("cocktail-container");
+  const searchBar = document.getElementById("search-bar");
+  const toggleButton = document.getElementById("toggle-mode");
+  // Fetch Cocktails from json-server
+  async function fetchCocktails(query = "") {
+    const response = await fetch(`http://localhost:3000/cocktails`);
     const data = await response.json();
+    const filteredData = data.filter(cocktail =>
+      cocktail.name.toLowerCase().includes(query.toLowerCase())
+    );
+    displayCocktails(filteredData);
+  }
 
-    // Handle case where no drinks are found
-    if (!data.drinks) {
-      console.log('No cocktails found');
-      displayCocktails(null);
-      return;
+  // Display Cocktails
+  function displayCocktails(cocktails) {
+    cocktailContainer.innerHTML = ""; // Clear container
+    if (cocktails.length > 0) {
+      cocktails.forEach((cocktail) => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+        card.innerHTML = `
+          <h3>${cocktail.name}</h3>
+          <img src="${cocktail.image}" alt="${cocktail.name}" width="100">
+          <p>Category: ${cocktail.category}</p>
+          <p class="description" style="display: none;">${cocktail.description || "No description available."}</p>
+        `;
+
+        // Add mouseover event
+        card.addEventListener("mouseover", () => {
+          card.style.backgroundColor = "#f0f8ff"; // Light blue highlight
+          card.style.cursor = "pointer";
+        });
+
+        // Add mouseout event to reset styles
+        card.addEventListener("mouseout", () => {
+          card.style.backgroundColor = ""; // Reset to default
+          card.style.cursor = "default";
+        });
+
+        // Add click event to show description
+        card.addEventListener("click", () => {
+          const description = card.querySelector(".description");
+          if (description.style.display === "none") {
+            description.style.display = "block"; // Show description
+          } else {
+            description.style.display = "none"; // Hide description
+          }
+        });
+
+        cocktailContainer.appendChild(card);
+      });
+    } else {
+      cocktailContainer.innerHTML = `<p>No cocktails found.</p>`;
     }
-
-    displayCocktails(data.drinks);
-  } catch (error) {
-    console.error('Error fetching cocktails:', error);
-    cocktailContainer.innerHTML = '<p>Something went wrong. Please try again later.</p>';
-  }
-}
-async function fetchCocktailsByCategory(category) {
-  try {
-    const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`);
-    const data = await response.json();
-
-    // Handle case where no drinks are found
-    if (!data.drinks) {
-      console.log('No cocktails found for this category');
-      displayCocktails(null);
-      return;
-    }
-
-    displayCocktails(data.drinks);
-  } catch (error) {
-    console.error('Error fetching cocktails by category:', error);
-    cocktailContainer.innerHTML = '<p>Something went wrong. Please try again later.</p>';
-  }
-}
-categoryFilter.addEventListener('change', () => {
-  const category = categoryFilter.value === 'All' ? '' : categoryFilter.value;
-  fetchCocktailsByCategory(category);
-});
-
-
-// Fetch and display a random cocktail
-async function fetchRandomCocktail() {
-  const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/random.php`);
-  const data = await response.json();
-  displayCocktails(data.drinks);
-}
-
-// Display cocktails in the DOM
-function displayCocktails(cocktails) {
-  cocktailContainer.innerHTML = '';
-  if (!cocktails || !Array.isArray(cocktails)) {
-    cocktailContainer.innerHTML = '<p>No cocktails found!</p>';
-    return;
   }
 
-  cocktails.forEach((cocktail) => {
-    const cocktailCard = document.createElement('div');
-    cocktailCard.className = 'cocktail-card';
-    cocktailCard.innerHTML = `
-      <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}">
-      <h3>${cocktail.strDrink}</h3>
-      <button data-id="${cocktail.idDrink}" class="details-btn">View Details</button>
-    `;
-    cocktailContainer.appendChild(cocktailCard);
+  // Event Listeners
+  searchBar.addEventListener("input", () => {
+    const query = searchBar.value;
+    fetchCocktails(query);
   });
 
-  // Add event listeners for "View Details" buttons
-  document.querySelectorAll('.details-btn').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-      fetchCocktailDetails(e.target.dataset.id);
-    });
+  toggleButton.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
   });
-}
 
-// Fetch and display cocktail details
-async function fetchCocktailDetails(id) {
-  const response = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`);
-  const data = await response.json();
-  const cocktail = data.drinks[0];
-  cocktailContainer.innerHTML = `
-    <div class="cocktail-details">
-      <img src="${cocktail.strDrinkThumb}" alt="${cocktail.strDrink}">
-      <h2>${cocktail.strDrink}</h2>
-      <p><strong>Category:</strong> ${cocktail.strCategory}</p>
-      <p><strong>Alcoholic:</strong> ${cocktail.strAlcoholic}</p>
-      <p><strong>Instructions:</strong> ${cocktail.strInstructions}</p>
-      <h3>Ingredients:</h3>
-      <ul>
-        ${Object.keys(cocktail)
-          .filter((key) => key.startsWith('strIngredient') && cocktail[key])
-          .map((key) => `<li>${cocktail[key]}</li>`)
-          .join('')}
-      </ul>
-      <button id="back-btn">Back</button>
-    </div>
-  `;
-
-  // Add event listener for the back button
-  document.getElementById('back-btn').addEventListener('click', () => {
-    fetchCocktailsByName(searchInput.value);
-  });
-}
-
-// Event listeners
-searchInput.addEventListener('input', () => {
-  fetchCocktailsByName(searchInput.value);
+  // Initial Fetch
+  fetchCocktails();
 });
 
-categoryFilter.addEventListener('change', () => {
-  const category = categoryFilter.value === 'All' ? '' : categoryFilter.value;
-  fetchCocktailsByCategory(category);
-});
-
-randomBtn.addEventListener('click', fetchRandomCocktail);
-
-// Initial fetch
-fetchCocktailsByName('');
