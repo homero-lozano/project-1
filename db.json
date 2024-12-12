@@ -4,30 +4,68 @@
       "id": 1,
       "name": "Penicillin",
       "category": "Classic",
+      "description": "A Whiskey Sour variation utilizing the amazing smoky qualities of an Islay Whiskey. Sam Ross, Milk & Honey, NYC, 2005", 
+      "ingredients": [
+        "2oz. Scotch",
+        "3/4oz. Lemon",
+        "3/8oz. Honey Syrup",
+        "3/8oz. Sweetened Ginger Juice",
+        "1/4oz. Islay Scotch"
+      ],
+      "instructions": "Add all ingredients (Except Islay Scotch) to shaker, fill completely with ice and shake vigorously. Strain into glass. Float Islay Scotch",
       "image": "https://www.thecocktaildb.com/images/media/drink/hc9b1a1521853096.jpg"
     },
     {
       "id": 2,
       "name": "Tommy's Margarita",
       "category": "Classic",
+      "description": "Tommy's Margarita, which was created by the legendary Julio Bermejo in the early 90s at his family's San Francisco restaurant Tommy's Mexican.", 
+      "ingredients": [
+        "2oz. Tequila",
+        "1oz. Lime Juice",
+        "1oz. Agave Syrup"
+      ],
+      "instructions": "Add all ingredients to shaker, fill completely with ice and shake vigorously. Strain in to glass.",
       "image": "https://www.thecocktaildb.com/images/media/drink/loezxn1504373874.jpg"
     },
     {
       "id": 3,
       "name": "Bijou",
-      "category": "Martini",
+      "category": "Classic", 
+      "description": "Harry Johnson's New & iImproved Bartender's Manual, 1882", 
+      "ingredients": [
+        "1 1/2oz. Gin",
+        "3/4oz. Sweet Vermouth",
+        "3/4oz. Green Chartreuse",
+        "2 dashes orange bitters"
+      ],
+      "instructions": "Add all ingredients to chilled boston glass, add cracked ice and stir for approximately 25-30 seconds, strain into chilled glass. Garnish with a lemon twist.",
       "image": "https://www.thecocktaildb.com/images/media/drink/rysb3r1513706985.jpg"
     },
     {
       "id": 4,
       "name": "Old Fashioned",
       "category": "Classic",
+      "description": "A stimulating liquor composed of spirits of any kind, sugar, water and bitters. This sentence, printed in 1806, is the first know report of the word cocktail.", 
+      "ingredients": [
+        "2oz. Bourbon",
+        "white sugar cube",
+        "3 dashes angostura bitters"
+      ],
+      "instructions": "Add all ingredients to mixing glass, add ice and stir 5 or 6 times. Garnish with both a lemon and orange twist.",
       "image": "https://www.thecocktaildb.com/images/media/drink/vrwquq1478252802.jpg"
     },
     {
       "id": 5,
       "name": "Manhattan",
       "category": "Classic",
+      "description": "A combination of whiskey, sweet vermouth, bitters, and a maraschino cherry garnish, this drink embodies the classic, spirit-foward, and aromatic school of cocktails.", 
+      "ingredients": [
+        "2oz. Rye",
+        "1oz. sweet vermouth",
+        "2 dashes angostura bitters"
+      ],
+      "instructions": "Add all ingredients to chilled boston glass, and cracked ice and stir for approximately 25-30 seconds, strain into chilled glass. Garnish with cherry. ",
       "image": "https://www.thecocktaildb.com/images/media/drink/yk70e31606771240.jpg"
     }
   ]
