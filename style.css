@@ -1,0 +1,61 @@
+/* Base Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1d3e5f;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensure full height for the page */
+  }
+  
+  /* Center the Header */
+  header {
+    font-family: Sofia, serif; 
+    display: flex; /* Enables flexbox */
+    justify-content: center; /* Centers content horizontally */
+    align-items: center; /* Centers content vertically */
+    background-color: #35393d; /* Optional: Add a background color */
+    color: rgb(250, 205, 239); /* Optional: Text color for contrast */
+    padding: 10px;
+    font-size: 24px; /* Adjust size as needed */
+    text-align: center;
+  }
+  
+  /* Cocktail Container */
+  #cocktail-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 100px;
+    justify-content: center;
+    padding: 70px;
+    flex-grow: 1; /* Allow this container to take remaining space */
+  }
+  
+  /* Cocktail Card */
+  .card {
+    border: 1px solid #7c7779;
+    border-radius: 30px;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    max-width: 200px;
+    text-align: center;
+    background-color: rgb(250, 205, 239);
+    transition: transform 0.3s, background-color 0.3s;
+  }
+  
+  .card img {
+    border-radius: 10px;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+    background-color: #ebf6ff;
+  }
+  
+  /* Cocktail Details */
+  .details {
+    text-align: left;
+    margin-top: 10px;
+  }
+  
